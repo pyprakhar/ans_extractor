@@ -75,7 +75,15 @@ if submit:
 # Footer
 st.markdown("""
     ---  
-    📝 **About**: This is a real-time AI-powered tool for processing camera-captured images.  
-    🔒 Your data is processed securely, and no data is stored permanently. The model used is 'gemini-1.5-pro'.  
+            
+
+
+
+
+
+
+
+
+            
     💬 Have questions? Reach out at: prakharsrivastava337@gmail.com
 """, unsafe_allow_html=True)
