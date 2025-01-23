@@ -14,12 +14,12 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 logging.basicConfig(level=logging.DEBUG)
 
 # Function to get the response from Gemini API
-def get_gemini_response(input_prompt, image_data, context):
+def get_gemini_response(image_data, context):
     if image_data is None:
         raise ValueError("No image data found.")
 
     model = genai.GenerativeModel('gemini-1.5-pro')
-    response = model.generate_content([input_prompt, image_data, context])
+    response = model.generate_content([ image_data, context])
     return response.text
 
 # Streamlit UI Setup
