@@ -14,7 +14,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 logging.basicConfig(level=logging.DEBUG)
 
 # Function to get the response from Gemini API
-def get_gemini_response(input_prompt,image_data, context):
+def get_gemini_response(image_data, context,input_prompt="give the response of this question precisely not solve full question just give ans in short or 2 -3 lines"):
     if image_data is None:
         raise ValueError("No image data found.")
 
@@ -62,7 +62,7 @@ if submit:
                 """
 
                 # Get response from Gemini
-                response = get_gemini_response( input_prompt,image_data, context)
+                response = get_gemini_response( image_data, context,input_prompt)
 
                 st.subheader("Gemini's Response 🤖")
                 st.write(response)
