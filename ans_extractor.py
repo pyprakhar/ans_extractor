@@ -30,25 +30,27 @@ st.markdown("""
     Enter your question and get insights based on the image.
 """)
 
-# Camera capture section
-st.subheader("1. Capture Image Using Camera 📷")
-image_file = st.camera_input("Take a photo")
+# Option to choose input method
+input_method = st.radio("Choose Input Method", ("Upload Image", "Use Camera"), index=0)
 
-# Image upload section
-st.subheader("2. Or Upload an Image 📁")
-uploaded_file = st.file_uploader("Choose an image file...", type=["jpg", "jpeg", "png"])
-
-# Determine which image to process
+# Image variables
 selected_image = None
-if image_file:
-    st.image(image_file, caption="Captured Image Preview", use_container_width=True)
-    selected_image = image_file.getvalue()
-elif uploaded_file:
-    st.image(uploaded_file, caption="Uploaded Image Preview", use_container_width=True)
-    selected_image = uploaded_file.getvalue()
+
+if input_method == "Use Camera":
+    st.subheader("Capture Image Using Camera 📷")
+    image_file = st.camera_input("Take a photo")
+    if image_file:
+        st.image(image_file, caption="Captured Image Preview", use_container_width=True)
+        selected_image = image_file.getvalue()
+else:
+    st.subheader("Upload an Image 📁")
+    uploaded_file = st.file_uploader("Choose an image file...", type=["jpg", "jpeg", "png"])
+    if uploaded_file:
+        st.image(uploaded_file, caption="Uploaded Image Preview", use_container_width=True)
+        selected_image = uploaded_file.getvalue()
 
 # User input section for prompt
-st.subheader("3. Enter Your Question 🧐")
+st.subheader("Enter Your Question 🧐")
 input_prompt = st.text_input("Ask a question about the image:", key="input_prompt")
 
 # Button to submit the question
