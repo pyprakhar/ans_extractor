@@ -36,7 +36,7 @@ image_file = st.camera_input("Take a photo")
 
 # Display captured image preview
 if image_file:
-    st.image(image_file, caption="Captured Image Preview", use_column_width=True)
+    st.image(image_file, caption="Captured Image Preview", use_container_width=True)
 
 # User input section for prompt
 # st.subheader("2. Enter Your Question 🧐")
@@ -50,7 +50,7 @@ if submit:
     if image_file:
         with st.spinner("Processing..."):
             try:
-                # Convert image to bytes for processing
+       # Convert image to bytes for processing
                 image_bytes = image_file.getvalue()
                 image_data = {"mime_type": "image/jpeg", "data": image_bytes}
 
