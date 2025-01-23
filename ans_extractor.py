@@ -14,7 +14,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 logging.basicConfig(level=logging.DEBUG)
 
 # Function to get the response from Gemini API
-def get_gemini_response(image_data, context,input_prompt="give the response of this question precisely not solve full question just give ans in short or 2 -3 lines"):
+def get_gemini_response(image_data, context, input_prompt="give the response of this question precisely not solve full question just give ans in short or 2 -3 lines"):
     if image_data is None:
         raise ValueError("No image data found.")
 
@@ -26,43 +26,51 @@ def get_gemini_response(image_data, context,input_prompt="give the response of t
 st.set_page_config(page_title="Real-Time Camera Input - AI Processor", layout="wide")
 st.title("📸 Real-Time Camera Input Processor")
 st.markdown("""
-    This app captures a real-time image from your camera, processes it, and sends it to Gemini AI for analysis.
-    Enter your question and get insights based on the captured image.
+    This app captures a real-time image from your camera or allows you to upload an image, processes it, and sends it to Gemini AI for analysis.
+    Enter your question and get insights based on the image.
 """)
 
 # Camera capture section
 st.subheader("1. Capture Image Using Camera 📷")
 image_file = st.camera_input("Take a photo")
 
-# Display captured image preview
+# Image upload section
+st.subheader("2. Or Upload an Image 📁")
+uploaded_file = st.file_uploader("Choose an image file...", type=["jpg", "jpeg", "png"])
+
+# Determine which image to process
+selected_image = None
 if image_file:
     st.image(image_file, caption="Captured Image Preview", use_container_width=True)
+    selected_image = image_file.getvalue()
+elif uploaded_file:
+    st.image(uploaded_file, caption="Uploaded Image Preview", use_container_width=True)
+    selected_image = uploaded_file.getvalue()
 
 # User input section for prompt
-st.subheader("2. Enter Your Question 🧐")
-input_prompt = st.text_input("Ask a question about the captured image:", key="input_prompt")
+st.subheader("3. Enter Your Question 🧐")
+input_prompt = st.text_input("Ask a question about the image:", key="input_prompt")
 
 # Button to submit the question
 submit = st.button("Process Image and Ask Gemini 🤖")
 
 # Response section
 if submit:
-    if image_file:
+    if selected_image:
         with st.spinner("Processing..."):
             try:
-       # Convert image to bytes for processing
-                image_bytes = image_file.getvalue()
-                image_data = {"mime_type": "image/jpeg", "data": image_bytes}
+                # Convert image to bytes for processing
+                image_data = {"mime_type": "image/jpeg", "data": selected_image}
 
                 # Predefined context for Gemini
                 context = """
                     You are an expert in understanding and analyzing images.
-                    The input is a real-time captured image, and your task is to answer the provided question based on the image's content.
-                    just give correct ans from the given options. Do not solve the question.
+                    The input is a captured or uploaded image, and your task is to answer the provided question based on the image's content.
+                    Just give the correct answer from the given options. Do not solve the question.
                 """
 
                 # Get response from Gemini
-                response = get_gemini_response( image_data, context,input_prompt)
+                response = get_gemini_response(image_data, context, input_prompt)
 
                 st.subheader("Gemini's Response 🤖")
                 st.write(response)
@@ -70,20 +78,10 @@ if submit:
                 logging.error(f"Error generating response from Gemini: {e}")
                 st.error(f"Error: {str(e)}")
     else:
-        st.warning("Please capture an image and enter a question to proceed.")
+        st.warning("Please capture or upload an image and enter a question to proceed.")
 
 # Footer
 st.markdown("""
     ---  
-            
-
-
-
-
-
-
-
-
-
     💬 Have questions? Reach out at: prakharsrivastava337@gmail.com
 """, unsafe_allow_html=True)
